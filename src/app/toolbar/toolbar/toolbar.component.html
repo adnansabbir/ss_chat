@@ -1,4 +1,4 @@
-<div style="height: 80vh;" *ngIf="showToolbar">
+<div style="height: 100vh;" *ngIf="showToolbar">
   <mat-toolbar color="primary">
     <mat-toolbar-row>
       <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>
@@ -18,17 +18,17 @@
 
   <mat-sidenav-container fxFlexFill>
     <mat-sidenav #sidenav>
-      <mat-nav-list>
+      <mat-nav-list class="list-size" ngClass.gt-xs="vw-40" ngClass.gt-sm="vw-30" >
         <ng-container *ngFor="let nav of navigation">
-          <a *ngIf="nav.type==='url'" mat-list-item [routerLink]="nav.url" routerLinkActive="active">{{nav.name}}</a>
+          <a *ngIf="nav.type==='url'" mat-list-item [routerLink]="nav.route" routerLinkActive="active">{{nav.name}}</a>
           <a *ngIf="nav.type==='action'" mat-list-item (click)="nav.action()">{{nav.name}}</a>
         </ng-container>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content fxFlexFill>
-      <ng-content></ng-content>
+      <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
 
-<ng-content *ngIf="!showToolbar"></ng-content>
+<router-outlet *ngIf="!showToolbar"></router-outlet>

@@ -15,6 +15,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('SHowing Dashboard component');
   }
 
   signOut(): void {

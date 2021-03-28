@@ -3,6 +3,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import {User} from '../../shared/services/user';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import {User} from '../../shared/services/user';
 
 export class AuthService {
   userData: any; // Save logged in user data
+  currentUserChanged: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(
     public afs: AngularFirestore,   // Inject Firestore service
@@ -23,12 +25,13 @@ export class AuthService {
       if (!!user) {
         this.userData = user;
         localStorage.setItem('user', JSON.stringify(this.userData));
-        // JSON.parse(localStorage.getItem('user') as string);
+        this.router.navigate(['']);
       } else {
         localStorage.removeItem('user');
-        // JSON.parse(localStorage.getItem('user') as string);
+        this.userData = null;
+        this.router.navigate(['auth']);
       }
-      this.router.navigate(['']);
+      this.currentUserChanged.next(this.userData);
     });
   }
 
@@ -47,6 +50,15 @@ export class AuthService {
     return this.afAuth.createUserWithEmailAndPassword(email, password)
       .then((result) => {
         // this.SendVerificationMail();
+        this.SetUserData(result.user);
+      }).catch((error) => {
+        window.alert(error.message);
+      });
+  }
+
+  SignInAnonymously(): Promise<void> {
+    return this.afAuth.signInAnonymously()
+      .then((result) => {
         this.SetUserData(result.user);
       }).catch((error) => {
         window.alert(error.message);
@@ -118,7 +130,6 @@ export class AuthService {
   SignOut(): Promise<void> {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');
-      this.router.navigate(['auth']);
     });
   }
 

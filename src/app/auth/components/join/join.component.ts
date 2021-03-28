@@ -30,6 +30,10 @@ export class JoinComponent implements OnInit {
   }
 
   join(): void {
+    if (!this.authForm.valid) {
+      this.joinAnonymously();
+      return;
+    }
     const {email, password} = this.authForm.value;
     this.authService.SignIn(email, password)
       .then(r => {
@@ -44,5 +48,9 @@ export class JoinComponent implements OnInit {
       // console.log(r);
       // this.authForm.reset();
     });
+  }
+
+  joinAnonymously(): void {
+    this.authService.SignInAnonymously();
   }
 }

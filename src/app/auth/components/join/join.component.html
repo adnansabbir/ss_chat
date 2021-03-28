@@ -1,4 +1,4 @@
-<div class="join-component" fxLayout="column" fxLayoutGap="12px" [formGroup]="authForm">
+<div class="join-component" fxLayout="column" fxLayoutGap="8px" [formGroup]="authForm">
   <div fxLayout="column" fxLayoutAlign="start center" class="header">
     <h1>Join</h1>
     <h1>Super Secret Chat</h1>
@@ -15,6 +15,9 @@
     <input matInput type="password" formControlName="password">
   </mat-form-field>
 
-  <button mat-raised-button color="primary" [disabled]="!authForm.valid" (click)="join()">Join</button>
+  <button mat-raised-button color="primary" (click)="join()">
+    <span *ngIf="authForm.valid">Join</span>
+    <span *ngIf="!authForm.valid">Join Anonymously</span>
+  </button>
   <button mat-raised-button color="accent" [disabled]="!authForm.valid" (click)="register()">Register</button>
 </div>
